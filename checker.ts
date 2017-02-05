@@ -1,17 +1,43 @@
 var exec = require('child_process').exec
 var execFile = require('child_process').execFile
+import SourceFile from './sourceFile'
+import * as fs from 'fs'
 
-execFile('g++', ['./env/test.cpp', '-o', './env/test.exe'], {}, function(error, stdout, stderr) {
+function compileAndRun(callback: (error, stdout: string, stderr: string) => any) {
+  execFile('g++', ['./env/test.cpp', '-o', './env/test.exe'], {}, function(error, stdout, stderr) {
 
-  exec('test.exe', {cwd: './env/'}, function(error, stdout, stderr) {
-      console.log(stdout)
-      
+    if (error || stderr)
+        callback(error, stdout, stderr)
+
+    exec('test.exe', {cwd: './env/'}, function(error, stdout, stderr) {
+        callback(error, stdout, stderr)
+    })
   })
+
+}
+
+
+function testFile(file: SourceFile, cb: (error, file: SourceFile) => any) {
+  fs.writeFile('./env/test.cpp', file.content, function(error) {
+
+    console.log("Running for " + file.name)
+    compileAndRun(function(error, stdout, stderr) {
+        console.log(stdout)
+        file.stdout = stdout
+
+        cb(error, file)
+    })
+  })
+}
+
+export { testFile }
+
+
 //   execFile('./env/a.exe', function(err, stdout, stderr) {
 //     // console.log(stderr)
 //     console.log(stdout)
 //   })
-})
+
 
 /*
 var spawn = require('child_process').spawn;
