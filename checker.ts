@@ -6,7 +6,7 @@ import Contest from './contest'
 import TestSet from './testSet'
 
 function compileAndRun(callback: (error, stdout: string, stderr: string) => any) {
-  execFile('g++', ['./env/test.cpp', '-o', './env/test.exe'], {}, function(error, stdout, stderr) {
+  execFile('g++', ['./env/test.cpp', '-o', './env/test.exe', '-std=c++11'], {}, function(error, stdout, stderr) {
 
     if (error || stderr)
         callback(error, stdout, stderr)
@@ -48,16 +48,19 @@ function testFile(contest: Contest, file: SourceFile, cb: (error, file: SourceFi
           for (let i = 0; i < testSet.expectedOutput.length; i++) {
               let s = testSet.expectedOutput[i]
               let debugString = lines[i]
-              
-              if (s.trim() === lines[i].trim()) {
-                  file.score++
-                  debugString += '\t[✓]'
-              }
-              else 
-                  debugString += '\t[X]'
 
-              debugString += '\t' + testSet.expectedOutput[i]
-              console.log(debugString)
+              if (i < lines.length) {
+              
+                if (s.trim() === lines[i].trim()) {
+                    file.score++
+                    debugString += '\t[✓]'
+                }
+                else 
+                    debugString += '\t[X]'
+
+                debugString += '\t' + testSet.expectedOutput[i]
+                console.log(debugString)
+              }
               
           }
 

@@ -10,10 +10,11 @@ let contest : Contest = new Contest()
 
 contest.inputFile = 'asc.in'
 contest.outputFile = 'asc.out'
-contest.sets.JR = new TestSet(['4','6','5','10','12'], ['5','7','6','11','13'])
-contest.sets.INT = new TestSet(['2','4','3','1','5'], ['4','16','9','1','25'])
+contest.sets.JR = new TestSet(['1', '2', '3', '4', '5'], ['1','2','3','4','5'])
+contest.sets.INT = new TestSet(['11','12','13','14','15'], ['1','2','3','4','5'])
+contest.sets.SR = new TestSet(['1', '2', '3', '4', '5'], ['1','2','3','4','5'])
 
-recursive('./c', function (err, files) {
+recursive('./c2', function (err, files) {
   // Files is an array of filename 
 
   async.map(files, function(item, callback) {
@@ -37,10 +38,16 @@ recursive('./c', function (err, files) {
 
 
 function testFiles(files: SourceFile[]) {
-  async.eachSeries(files, function(file, callback) {
-      checker.testFile(contest, file, callback)
-    }, function(error) {
-    console.log(files)
+  async.eachSeries(files, function(file: SourceFile, callback) {
+      if (file.div_code != null)
+        checker.testFile(contest, file, callback)
+      else {
+        file.score = 0
+        callback(null, file)
+      }
+
+}, function(error) {
+    console.log(files.map((x) => { return {name:x.name, score:x.score}}))
   })
 }
 
@@ -64,6 +71,9 @@ function fillFileData(sourceFile : SourceFile): void {
 
   sourceFile.name = parseValue(content, 'name')
   sourceFile.div_long = parseValue(content, 'division')
+  if (sourceFile.div_long == null)
+    sourceFile.div_code = null;
+  else
   switch (sourceFile.div_long[0])
   {
     case 'J':
