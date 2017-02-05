@@ -3,7 +3,8 @@ export default class SourceFile {
   content: string
 
   name: string
-  division: string
+  div_long: string
+  div_code: string
 
   score: number
   stdout: string

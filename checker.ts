@@ -10,10 +10,11 @@ function compileAndRun(callback: (error, stdout: string, stderr: string) => any)
 
     if (error || stderr)
         callback(error, stdout, stderr)
-
-    exec('test.exe', {cwd: './env/'}, function(error, stdout, stderr) {
-        callback(error, stdout, stderr)
-    })
+    
+    else
+      exec('test.exe', {cwd: './env/'}, function(error, stdout, stderr) {
+          callback(error, stdout, stderr)
+      })
   })
 
 }
@@ -22,20 +23,28 @@ function compileAndRun(callback: (error, stdout: string, stderr: string) => any)
 function testFile(contest: Contest, file: SourceFile, cb: (error, file: SourceFile) => any) {
 
     
-  var testSet = contest.intSet
+  var testSet = contest.sets[file.div_code]
 
   fs.writeFile('./env/' + contest.inputFile, testSet.input.join('\n'), function(error) {
     fs.writeFile('./env/test.cpp', file.content, function(error) {
 
-      console.log("Running for " + file.name)
+      console.log("Running for " + file.name + ' [' + file.div_code + ']')
+      
+          file.score = 0
       
 
       compileAndRun(function(error, stdout, stderr) {
+        if (error) {
+          console.log(error)
+          cb(error, file)
+        }
+
+        else {
+
           file.stdout = stdout
           
           var lines = stdout.split(/\r?\n/)
 
-          file.score = 0
           for (let i = 0; i < testSet.expectedOutput.length; i++) {
               let s = testSet.expectedOutput[i]
               let debugString = lines[i]
@@ -55,6 +64,7 @@ function testFile(contest: Contest, file: SourceFile, cb: (error, file: SourceFi
           console.log("Score:\t" + file.score)
 
           cb(error, file)
+        }
       })
     })
   })

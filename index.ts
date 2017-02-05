@@ -10,7 +10,8 @@ let contest : Contest = new Contest()
 
 contest.inputFile = 'asc.in'
 contest.outputFile = 'asc.out'
-contest.intSet = new TestSet(['2','4','3','1','5'], ['4','16','9','1','25'])
+contest.sets.JR = new TestSet(['4','6','5','10','12'], ['5','7','6','11','13'])
+contest.sets.INT = new TestSet(['2','4','3','1','5'], ['4','16','9','1','25'])
 
 recursive('./c', function (err, files) {
   // Files is an array of filename 
@@ -62,8 +63,19 @@ function fillFileData(sourceFile : SourceFile): void {
   var content = sourceFile.content
 
   sourceFile.name = parseValue(content, 'name')
-  sourceFile.division = parseValue(content, 'division')
-  
+  sourceFile.div_long = parseValue(content, 'division')
+  switch (sourceFile.div_long[0])
+  {
+    case 'J':
+    sourceFile.div_code = "JR"
+    break
+    case 'I':
+    sourceFile.div_code = "INT"
+    break
+    case 'S':
+    sourceFile.div_code = "SR"
+    break
+  }
 
   let surname = parseValue(content, 'surname')
   if (sourceFile.name && surname)

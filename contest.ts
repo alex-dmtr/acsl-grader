@@ -5,7 +5,17 @@ export default class Contest
   inputFile: string
   outputFile: string
 
-  jrSet: TestSet
-  intSet: TestSet
-  srSet: TestSet
+  sets: {
+    "JR": TestSet,
+    "INT": TestSet,
+    "SR": TestSet
+  }
+
+  constructor() {
+    this.sets = {
+      "JR": null,
+      "INT": null,
+      "SR": null
+    }
+  }
 }
