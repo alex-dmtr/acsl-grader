@@ -2,6 +2,8 @@ var exec = require('child_process').exec
 var execFile = require('child_process').execFile
 import SourceFile from './sourceFile'
 import * as fs from 'fs'
+import Contest from './contest'
+import TestSet from './testSet'
 
 function compileAndRun(callback: (error, stdout: string, stderr: string) => any) {
   execFile('g++', ['./env/test.cpp', '-o', './env/test.exe'], {}, function(error, stdout, stderr) {
@@ -17,15 +19,43 @@ function compileAndRun(callback: (error, stdout: string, stderr: string) => any)
 }
 
 
-function testFile(file: SourceFile, cb: (error, file: SourceFile) => any) {
-  fs.writeFile('./env/test.cpp', file.content, function(error) {
+function testFile(contest: Contest, file: SourceFile, cb: (error, file: SourceFile) => any) {
 
-    console.log("Running for " + file.name)
-    compileAndRun(function(error, stdout, stderr) {
-        console.log(stdout)
-        file.stdout = stdout
+    
+  var testSet = contest.intSet
 
-        cb(error, file)
+  fs.writeFile('./env/' + contest.inputFile, testSet.input.join('\n'), function(error) {
+    fs.writeFile('./env/test.cpp', file.content, function(error) {
+
+      console.log("Running for " + file.name)
+      
+
+      compileAndRun(function(error, stdout, stderr) {
+          file.stdout = stdout
+          
+          var lines = stdout.split(/\r?\n/)
+
+          file.score = 0
+          for (let i = 0; i < testSet.expectedOutput.length; i++) {
+              let s = testSet.expectedOutput[i]
+              let debugString = lines[i]
+              
+              if (s.trim() === lines[i].trim()) {
+                  file.score++
+                  debugString += '\t[✓]'
+              }
+              else 
+                  debugString += '\t[X]'
+
+              debugString += '\t' + testSet.expectedOutput[i]
+              console.log(debugString)
+              
+          }
+
+          console.log("Score:\t" + file.score)
+
+          cb(error, file)
+      })
     })
   })
 }

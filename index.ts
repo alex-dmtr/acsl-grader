@@ -3,7 +3,14 @@ import * as async from 'async'
 import * as fs from 'fs'
 import * as checker from './checker'
 import SourceFile from './sourceFile'
+import Contest from './contest'
+import TestSet from './testSet'
 
+let contest : Contest = new Contest()
+
+contest.inputFile = 'asc.in'
+contest.outputFile = 'asc.out'
+contest.intSet = new TestSet(['2','4','3','1','5'], ['4','16','9','1','25'])
 
 recursive('./c', function (err, files) {
   // Files is an array of filename 
@@ -29,7 +36,9 @@ recursive('./c', function (err, files) {
 
 
 function testFiles(files: SourceFile[]) {
-  async.eachSeries(files, checker.testFile, function(error) {
+  async.eachSeries(files, function(file, callback) {
+      checker.testFile(contest, file, callback)
+    }, function(error) {
     console.log(files)
   })
 }

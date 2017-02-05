@@ -5,5 +5,7 @@ export default class SourceFile {
   name: string
   division: string
 
+  score: number
   stdout: string
+
 }
