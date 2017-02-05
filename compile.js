@@ -1,3 +1,19 @@
+var exec = require('child_process').exec
+var execFile = require('child_process').execFile
+
+execFile('g++', ['./env/test.cpp', '-o', './env/test.exe'], {}, function(error, stdout, stderr) {
+
+  exec('test.exe', {cwd: './env/'}, function(error, stdout, stderr) {
+      console.log(stdout)
+      
+  })
+//   execFile('./env/a.exe', function(err, stdout, stderr) {
+//     // console.log(stderr)
+//     console.log(stdout)
+//   })
+})
+
+/*
 var spawn = require('child_process').spawn;
 var compile = spawn('g++',  ['./env/test.cpp', '-o', './env/a.exe']);
 compile.stdout.on('data', function (data) {
@@ -20,4 +36,4 @@ compile.on('close', function (data) {
             console.log('stdout: ' + output);
         })
     }
-})
+})*/
