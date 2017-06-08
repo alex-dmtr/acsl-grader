@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "ts-node index.ts",
-    "start": "nodemon ./web/bin/www.js",
-    "build": "webpack -d"
+    "start": "npm-run-all --parallel watch:server watch:build",
+    "watch:build": "webpack -d --watch",
+    "watch:server": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +23,8 @@
     "express": "^4.15.3",
     "hbs": "~4.0.1",
     "morgan": "~1.8.1",
+    "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "recursive-readdir": "^2.1.0",
