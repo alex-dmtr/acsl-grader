@@ -1,0 +1,33 @@
+<div id="problem">
+  <form method="POST" enctype="multipart/form-data">
+    <h2>{{problem.name}}</h2>
+    <p>{{problem.description}}</p>
+    <table className="table table-bordered">
+      <thead>
+        <tr>
+          <th>Sample Input</th>
+          <th>Sample Output</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            {{#each problem.input}}
+              <p>{{this}}</p>
+            {{/each}}
+          </td>
+          <td>
+            {{#each problem.output}}
+              <p>{{this}}</p>
+            {{/each}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+          <input type="file" name="source" accept=".cpp"></input>
+          <input type="submit"></input>
+  </form>
+</div>
+
+{{!--<script src="/dist/problem.js" defer></script>--}}

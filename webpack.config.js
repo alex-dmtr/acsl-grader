@@ -3,10 +3,13 @@ var path = require('path');
 const APP_DIR = path.resolve(__dirname, 'app');
 const DIST_DIR = path.resolve(__dirname, 'public', 'dist');
 
+const ENTRY_POINTS = {
+  problem: path.resolve(APP_DIR, 'problem.jsx')
+}
 module.exports = {
-  entry: path.resolve(APP_DIR, 'index.jsx'), //'./app/index.js',
+  entry: ENTRY_POINTS, //path.resolve(APP_DIR, 'index.jsx'), //'./app/index.js',
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: DIST_DIR
   },
   module: {

@@ -1,9 +1,9 @@
-var exec = require('child_process').exec
-var execFile = require('child_process').execFile
-import SourceFile from './sourceFile'
-import * as fs from 'fs'
-import Contest from './contest'
-import TestSet from './testSet'
+var exec = require('child_process').exec;
+var execFile = require('child_process').execFile;
+import SourceFile from './sourceFile';
+import * as fs from 'fs';
+import Contest from './contest';
+import TestSet from './testSet';
 
 function compileAndRun(callback: (error, stdout: string, stderr: string) => any) {
   execFile('g++', ['./env/test.cpp', '-o', './env/test.exe', '-std=c++11'], {}, function(error, stdout, stderr) {

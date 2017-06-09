@@ -1,16 +1,27 @@
 import React from 'react';
 import {render} from 'react-dom';
+import {ProblemPage, ProblemList} from './problem.jsx'
 
-class App extends React.Component {
+class Index extends React.Component {
   render () {
+
     return (
       <div>
-        <p>Hello there!</p>
-        <p>General {this.props.name}.</p>
+      <p>Hey there!</p>
+      <a href="/problems">View problems</a>
       </div>
     );
   }
 }
 
+function renderComponent(id, Component) {
+  let $component = document.getElementById(id);
+  if ($component)
+    render(<Component />, $component);
+}
 
-render(<App name="Kenobi"/>, document.getElementById('app'));
+renderComponent('problems', ProblemList)
+renderComponent('problem', ProblemPage);
+renderComponent('index', Index);
+// let $problem = document.getElementById('problem');
+// if ($problem) render(<Problem />, problem);
